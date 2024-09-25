@@ -1,7 +1,9 @@
+#include <cstdlib>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include "general.h"
 #include "err_proc.h"
@@ -21,17 +23,20 @@ opt_data *opt_data_constructor(const char *const short_name_src, const char *con
 
     option->short_name = (char *) calloc(short_sz + 1, sizeof(char));
     if (option->short_name == NULL) {
-        ASSERT(ERR_CALLOC, goto END_POINT_0)
+        DEBUG_ERROR(ERR_CALLOC)
+        CLEAR_MEMORY(exit_mark)
     }
 
     option->long_name = (char *) calloc(long_sz + 1, sizeof(char));
     if (option->long_name == NULL) {
-        ASSERT(ERR_CALLOC, goto END_POINT_1)
+        DEBUG_ERROR(ERR_CALLOC)
+        CLEAR_MEMORY(exit_mark)
     }
 
     option->fmt = (char *) calloc(fmt_sz + 1, sizeof(char));
     if (option->fmt == NULL) {
-        ASSERT(ERR_CALLOC, goto END_POINT_1)
+        DEBUG_ERROR(ERR_CALLOC)
+        CLEAR_MEMORY(exit_mark)
     }
 
     option->val_ptr = val_ptr_src;
@@ -45,10 +50,22 @@ opt_data *opt_data_constructor(const char *const short_name_src, const char *con
 
     return option;
 
-    END_POINT_1: // TODO: сменить goto END_POINT на понятный макрос
-    FREE(option->short_name)
-    END_POINT_0:
-    FREE(option)
+    exit_mark:
+    if (option != NULL) {
+        FREE(option)
+    }
+
+    if (option->short_name != NULL) {
+        FREE(option->short_name)
+    }
+
+    if (option->long_name != NULL) {
+        FREE(option->long_name)
+    }
+
+    if (option->fmt != NULL) {
+        FREE(option->fmt)
+    }
 
     return NULL;
 }
@@ -59,11 +76,8 @@ void opt_data_destructor(opt_data *option) {
     FREE(option);
 }
 
-
-
 opt_data *option_list_ptr(const char *name, opt_data *opts[], const size_t n_opts) {
     for (size_t i = 0; i < n_opts; i++) {
-        printf("patt/text: %s/%s\n", name, opts[i]->long_name);
         if (strcmp(name, opts[i]->short_name) == 0 || strcmp(name, opts[i]->long_name) == 0) {
             return opts[i];
         }
@@ -75,23 +89,20 @@ void get_options(const int argc, const char* argv[], opt_data *opts[], const siz
     assert(argc >= 0);
 
     for (int i = 1; i < argc; i++) {
-        // --testing=52
-        char *name = (char *) calloc(30, 1);
-        char *value = (char *) calloc(30, 1);
+        char *name = (char *) calloc(strlen(argv[i]), sizeof(char)); // FIXME: заменить на статические переменные
+        char *value = (char *) calloc(strlen(argv[i]), sizeof(char));
 
-        printf("argv[%d] = %s\n", i, argv[i]);
         sscanf(argv[i], "%[^=]%s", name, value);
 
-        printf("name/value: %s/%s\n", name, value);
-
         opt_data *ptr = option_list_ptr(name, opts, n_opts);
-        printf("\n");
+
         if (ptr != NULL) {
             ptr->exist = true;
-            printf("src/fmt/val: %s/%s\n", (value + 1), ptr->fmt);
+
             sscanf(value + 1, (ptr->fmt), ptr->val_ptr);
         }
 
-
+        FREE(name)
+        FREE(value)
     }
 }

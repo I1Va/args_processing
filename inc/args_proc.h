@@ -1,19 +1,7 @@
 #ifndef ARGS_PROC_H
 #define ARGS_PROC_H
 
-struct testing_config {
-    char *name;
-    int n_tests;
-};
-
-struct help_config {
-    double glombik;
-};
-
-struct main_config {
-    long mega_size;
-};
-
+#include <string.h>
 
 struct opt_data {
     char *short_name;
