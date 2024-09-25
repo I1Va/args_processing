@@ -46,5 +46,8 @@ debug:
 	$(CC) $(SRC_FILES) -o $(SRC_OUTPUTFILE) $(DEFINE_FLAGS) $(INCLUDE_FLAGS) $(CC_DEBUG_FLAGS)
 	./$(SRC_OUTPUTFILE)
 
+args: build
+	./$(SRC_OUTPUTFILE) --testing@name=helloworld --help@glombik=179.522006 --main@mega_size=15
+
 launch: build
 	./$(SRC_OUTPUTFILE) # отделить запуск от компиляции

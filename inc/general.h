@@ -33,6 +33,10 @@
     })
 */
 
+#define ASSERT(error, end_instruction)                                                                                    \
+    fprintf_red(stderr, "{%s} [%s: %d]: descr{%s}\n", __FILE_NAME__, __PRETTY_FUNCTION__, __LINE__, get_descr(error));    \
+    end_instruction;
+
 enum RETURN_STATES {
     RETURN_ERROR = -1,
     RETURN_FALSE =  0,
