@@ -38,12 +38,12 @@ void get_options(const int argc, const char* argv[], opt_data opts[], const size
     }
 }
 
-// MODES/CONFIG ZONE
+// // MODES/CONFIG ZONE
 
-void example_config_print(example_config_t *conf) {
-    fprintf_red(stdout, RED "example_config_t: \n");
-    fprintf(stdout, "conf_coeff: %f\n", conf->coeff);
-    fprintf(stdout, "conf_name: %s\n", conf->name);
-    fprintf(stdout, "conf_coeff: %lld\n", conf->value);
-    fprintf(stdout, "conf_coeff: %d\n", conf->n);
+void example_config_print(FILE *stream, example_config_t *conf) {
+    fprintf_red(stream, RED "example_config_t: \n");
+    fprintf(stream, "conf_coeff: %f\n", conf->coeff);
+    fprintf(stream, "conf_name: %s\n", conf->name);
+    fprintf(stream, "conf_coeff: %lld\n", conf->value);
+    fprintf(stream, "conf_coeff: %d\n", conf->n);
 }
