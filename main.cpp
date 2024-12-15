@@ -23,7 +23,7 @@ int main(const int argc, const char *argv[]) {
 
     get_options(argc, argv, options, n_options);
 
-    example_config_print(&example_config);
+    example_config_print(stdout, &example_config);
 
     return EXIT_SUCCESS;
 }

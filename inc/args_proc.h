@@ -2,6 +2,7 @@
 #define ARGS_PROC_H
 
 #include <string.h>
+#include <stdio.h>
 
 struct opt_data {
     const char *short_name;
@@ -39,6 +40,6 @@ void example_config_ctor(example_config_t *conf);
 
 void example_config_dtor(example_config_t *conf);
 
-void example_config_print(example_config_t *conf);
+void example_config_print(FILE *stream, example_config_t *conf);
 
 #endif // ARGS_PROC_H
